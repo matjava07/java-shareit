@@ -14,7 +14,7 @@ public class ItemDaoImpl implements ItemRepository {
 
     private final Map<Long, Item> items = new HashMap<>();
     private final Map<Long, List<Item>> userItemIndex = new LinkedHashMap<>();
-    private static Long id = 1L;
+    private Long id = 1L;
 
     @Override
     public Item create(Item item) {

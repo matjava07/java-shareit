@@ -13,7 +13,7 @@ import java.util.*;
 public class UserDaoImpl implements UserRepository {
 
     private final Map<Long, User> users = new HashMap<>();
-    private static Long id = 1L;
+    private Long id = 1L;
 
     @Override
     public User create(User user) {
