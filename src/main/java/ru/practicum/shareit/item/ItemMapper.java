@@ -39,6 +39,4 @@ public class ItemMapper {
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
-
-
 }
