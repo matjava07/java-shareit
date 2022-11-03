@@ -15,7 +15,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
-    private final static String SHARER_USER_ID = "X-Sharer-User-Id";
+    private final String SHARER_USER_ID = "X-Sharer-User-Id";
 
     @PostMapping
     public ItemDto create(@RequestBody @Validated(Create.class) ItemDto itemDto,
