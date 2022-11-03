@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exeption.DublicateEmailException;
-import ru.practicum.shareit.generate.GenerateId;
 
 import java.util.*;
 
@@ -14,12 +13,12 @@ import java.util.*;
 public class UserDaoImpl implements UserRepository {
 
     private final Map<Long, User> users = new HashMap<>();
-    private final GenerateId generateId;
+    private static Long id = 1L;
 
     @Override
     public User create(User user) {
         if (users.values().stream().filter(x -> x.getEmail().equals(user.getEmail())).findFirst().isEmpty()) {
-            user.setId(generateId.getId());
+            user.setId(id++);
             users.put(user.getId(), user);
             return user;
         } else {

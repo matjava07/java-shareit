@@ -3,7 +3,6 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exeption.ObjectExcistenceException;
-import ru.practicum.shareit.generate.GenerateId;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.*;
@@ -15,11 +14,11 @@ public class ItemDaoImpl implements ItemRepository {
 
     private final Map<Long, Item> items = new HashMap<>();
     private final Map<Long, List<Item>> userItemIndex = new LinkedHashMap<>();
-    private final GenerateId generateId;
+    private static Long id = 1L;
 
     @Override
     public Item create(Item item) {
-        item.setId(generateId.getId());
+        item.setId(id++);
         items.put(item.getId(), item);
         final List<Item> userItems = userItemIndex.computeIfAbsent(item.getOwner().getId(), k -> new ArrayList<>());
         userItems.add(item);

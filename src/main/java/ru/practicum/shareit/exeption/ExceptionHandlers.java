@@ -13,31 +13,31 @@ public class ExceptionHandlers {
 
     @ExceptionHandler
     public ResponseEntity<String> exc(ValidationException ex) {
-        log.info("Код ошибки: 400");
+        log.info("Код ошибки: 400. Ошибка: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> exc(ObjectExcistenceException ex) {
-        log.info("Код ошибки: 404");
+        log.info("Код ошибки: 404. Ошибка: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> exc(Throwable ex) {
-        log.info("Код ошибки: 500");
+        log.info("Код ошибки: 500. Ошибка: " + ex.getMessage());
         return new ResponseEntity<>("Поймано необработанное исключение", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> exc(DublicateEmailException ex) {
-        log.info("Код ошибки: 409");
+        log.info("Код ошибки: 409. Ошибка: " + ex.getMessage());
         return new ResponseEntity<>("Поймано необработанное исключение", HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> exc(MethodArgumentNotValidException ex) {
-        log.info("Код ошибки 400");
+        log.info("Код ошибки 400. Ошибка: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

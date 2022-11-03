@@ -21,4 +21,42 @@ public class ItemDto {
     @NotNull(groups = {Create.class})
     private Boolean available;
     private Long request;
+
+    public static class Builder {
+
+        private final ItemDto itemDto;
+
+        public Builder() {
+            itemDto = new ItemDto();
+        }
+
+        public Builder setId(Long id) {
+            itemDto.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            itemDto.name = name;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            itemDto.description = description;
+            return this;
+        }
+
+        public Builder setAvailable(Boolean available) {
+            itemDto.available = available;
+            return this;
+        }
+
+        public Builder setRequest(Long request) {
+            itemDto.request = request;
+            return this;
+        }
+
+        public ItemDto build() {
+            return itemDto;
+        }
+    }
 }

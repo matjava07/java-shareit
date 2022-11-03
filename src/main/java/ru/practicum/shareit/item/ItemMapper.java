@@ -12,24 +12,25 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemMapper {
     public static ItemDto toItemDto(Item item) {
-        return new ItemDto(
-                item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getAvailable(),
-                item.getRequest()
-        );
+        return new ItemDto.Builder()
+                .setId(item.getId())
+                .setName(item.getName())
+                .setDescription(item.getDescription())
+                .setAvailable(item.getAvailable())
+                .setRequest(item.getRequest())
+                .build();
     }
 
     public static Item toItem(ItemDto itemDto, User user) {
-        return new Item(
-                itemDto.getId(),
-                itemDto.getName(),
-                itemDto.getDescription(),
-                itemDto.getAvailable(),
-                user,
-                itemDto.getRequest()
-        );
+        return new Item.Builder()
+                .setId(itemDto.getId())
+                .setName(itemDto.getName())
+                .setDescription(itemDto.getDescription())
+                .setAvailable(itemDto.getAvailable())
+                .setOwner(user)
+                .setRequest(itemDto.getRequest())
+                .build();
+
     }
 
     public static List<ItemDto> toListItemDto(List<Item> items) {
