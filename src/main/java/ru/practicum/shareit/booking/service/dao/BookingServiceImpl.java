@@ -37,19 +37,18 @@ public class BookingServiceImpl implements BookingService {
     public BookingDtoOutput create(BookingDtoInput bookingDto, Long userId) {
         User user = userService.getById(userId);
         Item item = itemService.getByIdForItem(bookingDto.getItemId());
-        if (!item.getOwner().getId().equals(userId)) {
-            Booking booking = BookingMapper.toBooking(bookingDto);
-            booking.setBooker(user);
-            booking.setItem(item);
-            booking.setStatus(Status.WAITING);
-            if (itemService.getById(booking.getItem().getId(), userId).getAvailable()
-                    && !booking.getStart().isAfter(booking.getEnd())) {
-                return getById(bookingRepository.save(booking).getId(), userId);
-            } else {
-                throw new ValidationException("Вещь не доступна для аренды");
-            }
-        } else {
+        if (item.getOwner().getId().equals(userId)) {
             throw new ObjectExcistenceException("Пользователь является владельцем");
+        }
+        Booking booking = BookingMapper.toBooking(bookingDto);
+        booking.setBooker(user);
+        booking.setItem(item);
+        booking.setStatus(Status.WAITING);
+        if (itemService.getById(booking.getItem().getId(), userId).getAvailable()
+                && !booking.getStart().isAfter(booking.getEnd())) {
+            return getById(bookingRepository.save(booking).getId(), userId);
+        } else {
+            throw new ValidationException("Вещь не доступна для аренды");
         }
     }
 
@@ -81,7 +80,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDtoOutput> getAllByOwner(Long id, String state) {
+    public List<BookingDtoOutput> getByOwner(Long id, String state) {
         userService.getById(id);
         List<Booking> bookings = List.of();
         switch (State.States.getState(state)) {
@@ -108,7 +107,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDtoOutput> getAllByBooker(Long id, String state) {
+    public List<BookingDtoOutput> getByBooker(Long id, String state) {
         userService.getById(id);
         List<Booking> bookings = List.of();
         switch (State.States.getState(state)) {

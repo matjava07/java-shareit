@@ -13,14 +13,14 @@ import java.util.stream.Collectors;
 public class BookingMapper {
 
     public static BookingDtoOutput toBookingDto(Booking booking) {
-        return new BookingDtoOutput(
-                booking.getId(),
-                booking.getStart(),
-                booking.getEnd(),
-                booking.getStatus(),
-                new BookingDtoOutput.Booker(booking.getBooker().getId()),
-                new BookingDtoOutput.Item(booking.getItem().getId(), booking.getItem().getName())
-        );
+        BookingDtoOutput bookingDtoOutput = new BookingDtoOutput();
+        bookingDtoOutput.setId(booking.getId());
+        bookingDtoOutput.setStart(booking.getStart());
+        bookingDtoOutput.setEnd(booking.getEnd());
+        bookingDtoOutput.setStatus(booking.getStatus());
+        bookingDtoOutput.setBooker(new BookingDtoOutput.Booker(booking.getBooker().getId()));
+        bookingDtoOutput.setItem(new BookingDtoOutput.Item(booking.getItem().getId(), booking.getItem().getName()));
+        return bookingDtoOutput;
     }
 
     public static Booking toBooking(BookingDtoInput bookingDto) {

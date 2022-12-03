@@ -111,10 +111,7 @@ public class ItemServiceImpl implements ItemService {
                         || (b.getStart().isEqual(now) || b.getStart().isBefore(now))))
                 .findFirst()
                 .orElse(null);
-        Booking nextBooking = bookings.stream()
-                .filter(b -> b.getStart().isAfter(now))
-                .reduce((first, second) -> second)
-                .orElse(null);
+        Booking nextBooking = getNextBooking(bookings, now);
         ItemDtoOutput.Booking lastBookingNew = new ItemDtoOutput.Booking();
         ItemDtoOutput.Booking nextBookingNew = new ItemDtoOutput.Booking();
         if (lastBooking != null) {
@@ -134,6 +131,12 @@ public class ItemServiceImpl implements ItemService {
     public ItemDtoOutput appendCommentsToItem(ItemDtoOutput itemDto, List<Comment> comments) {
         itemDto.setComments(CommentMapper.toListItemCommentDto(comments));
         return itemDto;
+    }
+    private Booking getNextBooking(List<Booking> bookings, LocalDateTime now) {
+        return bookings.stream()
+                .filter(b -> b.getStart().isAfter(now))
+                .reduce((first, second) -> second)
+                .orElse(null);
     }
 
     private Map<Item, List<Comment>> getComments(List<Item> items) {
