@@ -132,6 +132,7 @@ public class ItemServiceImpl implements ItemService {
         itemDto.setComments(CommentMapper.toListItemCommentDto(comments));
         return itemDto;
     }
+
     private Booking getNextBooking(List<Booking> bookings, LocalDateTime now) {
         return bookings.stream()
                 .filter(b -> b.getStart().isAfter(now))
