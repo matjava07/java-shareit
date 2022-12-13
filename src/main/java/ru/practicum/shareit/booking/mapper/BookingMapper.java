@@ -13,8 +13,7 @@ import java.util.stream.Collectors;
 public class BookingMapper {
 
     public static BookingDtoOutput toBookingDto(Booking booking) {
-        return BookingDtoOutput
-                .builder()
+        return BookingDtoOutput.builder()
                 .id(booking.getId())
                 .start(booking.getStart())
                 .end(booking.getEnd())

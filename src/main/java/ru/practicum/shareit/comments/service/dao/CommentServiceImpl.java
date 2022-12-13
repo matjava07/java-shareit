@@ -1,6 +1,7 @@
 package ru.practicum.shareit.comments.service.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.data.domain.Sort.Direction.DESC;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -35,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
         List<Booking> bookings = bookingRepository.getAllByBookerPast(
                         userId,
                         LocalDateTime.now(),
-                        Sort.by(Sort.Direction.DESC, "start"))
+                        PageRequest.of(0, 100, Sort.by(DESC, "start")))
                 .stream()
                 .filter(b -> b.getItem().getId().equals(itemId))
                 .collect(Collectors.toList());

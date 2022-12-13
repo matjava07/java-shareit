@@ -18,4 +18,5 @@ public class ItemDtoInput {
     private String description;
     @NotNull(groups = {Create.class})
     private Boolean available;
+    private Long requestId;
 }

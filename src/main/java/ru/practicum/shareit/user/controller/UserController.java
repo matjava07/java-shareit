@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exeption.exeptions.ObjectExcistenceException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.service.dal.UserService;
@@ -31,13 +30,10 @@ public class UserController {
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable("id") @Positive Long userId,
                           @RequestBody @Validated(Update.class) UserDto userDto) {
-        if (userId > 0) {
-            log.info("Пользователь обновился");
-            userDto.setId(userId);
-            return UserMapper.toUserDto(userService.update(UserMapper.toUser(userDto)));
-        } else {
-            throw new ObjectExcistenceException("Пользователь не существует.");
-        }
+
+        log.info("Пользователь обновился");
+        userDto.setId(userId);
+        return UserMapper.toUserDto(userService.update(UserMapper.toUser(userDto)));
     }
 
     @GetMapping("/{id}")

@@ -12,11 +12,14 @@ import ru.practicum.shareit.user.valid.Create;
 import ru.practicum.shareit.user.valid.Update;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
+@Validated
 public class ItemController {
     private final ItemService itemService;
     private final CommentService commentService;
@@ -44,16 +47,20 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDtoOutput> getAll(@RequestHeader(USER_ID) Long userId) {
-        return itemService.getAll(userId);
+    public List<ItemDtoOutput> getAll(@RequestHeader(USER_ID) Long userId,
+                                      @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") Integer from,
+                                      @Positive @RequestParam(value = "size", defaultValue = "20") Integer size) {
+        return itemService.getAll(userId, from, size);
     }
 
     @GetMapping("/search")
-    public List<ItemDtoOutput> getByText(@RequestParam("text") String text) {
+    public List<ItemDtoOutput> getByText(@RequestParam("text") String text,
+                                         @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") Integer from,
+                                         @Positive @RequestParam(value = "size", defaultValue = "20") Integer size) {
         if (text.isBlank()) {
             return List.of();
         } else {
-            return itemService.getByText(text.toLowerCase());
+            return itemService.getByText(text.toLowerCase(), from, size);
         }
     }
 

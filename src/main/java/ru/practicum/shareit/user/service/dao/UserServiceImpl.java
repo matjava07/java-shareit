@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exeption.exeptions.ObjectExcistenceException;
-import ru.practicum.shareit.user.service.dal.UserService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.service.dal.UserService;
 
 import java.util.List;
 
@@ -44,7 +44,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteById(Long userId) {
-        userRepository.deleteById(userId);
+        userRepository.findById(userId)
+                .ifPresent(user -> userRepository.deleteById(user.getId()));
     }
 
     private User updateUserIfParamIsNull(User user) {

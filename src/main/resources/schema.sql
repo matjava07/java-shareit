@@ -4,7 +4,14 @@ create table if not exists users
     email varchar(300) UNIQUE,
     name  varchar(300)
 );
-
+create table if not exists request
+(
+    id        bigint generated always as identity primary key,
+    description  varchar(300),
+    requestor_id bigint,
+    created   TIMESTAMP,
+    constraint fk_request_to_users foreign key (requestor_id) references users (id)
+);
 create table if not exists items
 (
     id           bigint generated always as identity primary key,
@@ -13,7 +20,8 @@ create table if not exists items
     is_available boolean,
     owner_id     bigint,
     request_id   bigint,
-    constraint fk_items_to_users foreign key (owner_id) references users (id)
+    constraint fk_items_to_users foreign key (owner_id) references users (id),
+    constraint fk_items_to_requestor foreign key (request_id) references request (id)
 );
 create table if not exists booking
 (
