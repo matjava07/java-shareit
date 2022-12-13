@@ -287,6 +287,19 @@ class ItemControllerTest {
     }
 
     @Test
+    void getByWithoutTextFail() throws Exception {
+
+        mvc.perform(get("/items/search")
+                        .param("text", "")
+                        .param("from", "-1")
+                        .param("size", "1")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void createComment() throws Exception {
         CommentDto commentDto = CommentMapper.toCommentDto(comment);
         Mockito

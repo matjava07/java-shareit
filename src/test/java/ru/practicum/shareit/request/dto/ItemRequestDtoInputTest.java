@@ -6,15 +6,11 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import org.springframework.boot.test.json.ObjectContent;
-import ru.practicum.shareit.request.dto.ItemRequestDtoInput;
-import ru.practicum.shareit.request.dto.ItemRequestDtoOutput;
-
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @JsonTest
 class ItemRequestDtoInputTest {

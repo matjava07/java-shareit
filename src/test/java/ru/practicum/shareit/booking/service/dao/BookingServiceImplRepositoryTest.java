@@ -33,7 +33,6 @@ class BookingServiceImplRepositoryTest {
     private ItemRepository itemRepository;
     @Autowired
     private BookingRepository bookingRepository;
-
     private User booker;
     private User owner;
     private Booking booking;

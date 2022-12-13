@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.exeption.exeptions.ObjectExcistenceException;
 import ru.practicum.shareit.item.dto.ItemDtoInput;
 import ru.practicum.shareit.item.dto.ItemDtoOutput;
 import ru.practicum.shareit.item.model.Item;
@@ -22,7 +21,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
 @SpringBootTest(

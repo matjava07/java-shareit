@@ -95,10 +95,12 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.getAllByOwnerAll(id, pageable);
                 break;
             case CURRENT:
-                bookings = bookingRepository.getAllByOwnerCurrent(id, LocalDateTime.now(), pageable);
+                bookings = bookingRepository.getAllByOwnerCurrent(id, LocalDateTime.now().withNano(0),
+                        pageable);
                 break;
             case PAST:
-                bookings = bookingRepository.getAllByOwnerPast(id, LocalDateTime.now(), pageable);
+                bookings = bookingRepository.getAllByOwnerPast(id, LocalDateTime.now().withNano(0),
+                        pageable);
                 break;
             case FUTURE:
                 bookings = bookingRepository.getAllByOwnerFuture(id, pageable);
@@ -123,10 +125,12 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.getAllByBookerAll(id, pageable);
                 break;
             case CURRENT:
-                bookings = bookingRepository.getAllByBookerCurrent(id, LocalDateTime.now(), pageable);
+                bookings = bookingRepository.getAllByBookerCurrent(id, LocalDateTime.now().withNano(0),
+                        pageable);
                 break;
             case PAST:
-                bookings = bookingRepository.getAllByBookerPast(id, LocalDateTime.now(), pageable);
+                bookings = bookingRepository.getAllByBookerPast(id, LocalDateTime.now().withNano(0),
+                        pageable);
                 break;
             case FUTURE:
                 bookings = bookingRepository.getAllByBookerFuture(id, pageable);

@@ -30,13 +30,10 @@ class UserControllerTest {
 
     @Autowired
     ObjectMapper mapper;
-
     @MockBean
     UserService userService;
-
     @Autowired
     private MockMvc mvc;
-
     private UserDto userDto;
 
     @BeforeEach

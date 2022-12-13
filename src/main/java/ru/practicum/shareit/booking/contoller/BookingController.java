@@ -45,7 +45,7 @@ public class BookingController {
                                                 @RequestHeader(USER_ID) Long userId,
                                                 @PositiveOrZero @RequestParam(value = "from",
                                                         defaultValue = "0") Integer from,
-                                                @Validated @Positive @RequestParam(value = "size",
+                                                @Positive @RequestParam(value = "size",
                                                         defaultValue = "20") Integer size) {
         return bookingService.getAllByOwner(userId, state, from, size);
     }

@@ -11,6 +11,8 @@ import ru.practicum.shareit.exeption.exeptions.ObjectExcistenceException;
 import ru.practicum.shareit.exeption.exeptions.ValidationException;
 import ru.practicum.shareit.exeption.response.ErrorResponse;
 
+import javax.validation.ConstraintViolationException;
+
 @RestControllerAdvice
 @Slf4j
 public class ExceptionHandlers {
@@ -41,6 +43,12 @@ public class ExceptionHandlers {
 
     @ExceptionHandler
     public ResponseEntity<String> exc(MethodArgumentNotValidException ex) {
+        log.info("Код ошибки 400");
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> exc(ConstraintViolationException ex) {
         log.info("Код ошибки 400");
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }

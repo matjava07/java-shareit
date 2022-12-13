@@ -27,7 +27,6 @@ class UserServiceImplTestIntegration {
 
     private final EntityManager em;
     private final UserService service;
-
     private User user1;
 
     @BeforeEach

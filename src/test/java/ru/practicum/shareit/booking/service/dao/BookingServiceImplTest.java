@@ -121,11 +121,12 @@ class BookingServiceImplTest {
                 .when(itemService.getByIdForItem(item.getId()))
                 .thenReturn(item);
 
-        ObjectExcistenceException ex = Assertions.assertThrows(ObjectExcistenceException.class, ()-> {
+        ObjectExcistenceException ex = Assertions.assertThrows(ObjectExcistenceException.class, () -> {
             bookingService.create(bookingDtoInput, owner.getId());
         });
         Assertions.assertEquals("Пользователь является владельцем", ex.getMessage());
     }
+
     @Test
     void createAvalableFalseTest() {
 
@@ -137,7 +138,7 @@ class BookingServiceImplTest {
                 .thenReturn(item);
 
         bookingDtoInput.setStart(LocalDateTime.of(2022, 12, 11, 8, 0));
-        ValidationException ex = Assertions.assertThrows(ValidationException.class, ()-> {
+        ValidationException ex = Assertions.assertThrows(ValidationException.class, () -> {
             bookingService.create(bookingDtoInput, booker.getId());
         });
         Assertions.assertEquals("Вещь не доступна для аренды", ex.getMessage());
@@ -164,18 +165,19 @@ class BookingServiceImplTest {
         Mockito
                 .when(bookingRepository.findById(anyLong()))
                 .thenReturn(Optional.of(booking));
-        ObjectExcistenceException ex = Assertions.assertThrows(ObjectExcistenceException.class, ()-> {
+        ObjectExcistenceException ex = Assertions.assertThrows(ObjectExcistenceException.class, () -> {
             bookingService.update(bookingDtoInput.getId(), booker.getId(), true);
         });
         Assertions.assertEquals("Попытка изменения статуса сделки не владельцем вещи", ex.getMessage());
     }
+
     @Test
     void updateOwnerTrueTest() {
         booking.setStatus(Status.APPROVED);
         Mockito
                 .when(bookingRepository.findById(anyLong()))
                 .thenReturn(Optional.of(booking));
-        ValidationException ex = Assertions.assertThrows(ValidationException.class, ()-> {
+        ValidationException ex = Assertions.assertThrows(ValidationException.class, () -> {
             bookingService.update(bookingDtoInput.getId(), owner.getId(), true);
         });
         Assertions.assertEquals("Сделка имеет такой статус", ex.getMessage());
@@ -203,8 +205,8 @@ class BookingServiceImplTest {
                 .when(bookingRepository.findById(anyLong()))
                 .thenReturn(Optional.of(booking));
         ObjectExcistenceException ex = Assertions.assertThrows(ObjectExcistenceException.class,
-                ()-> {
-            bookingService.getById(booking.getId(), 100L);
+                () -> {
+                    bookingService.getById(booking.getId(), 100L);
                 });
         Assertions.assertEquals("Пользователь не относится к сделке", ex.getMessage());
     }
@@ -228,6 +230,203 @@ class BookingServiceImplTest {
                 .thenReturn(bookings);
         List<BookingDtoOutput> newBookingDtoOutputList =
                 bookingService.getAllByOwner(owner.getId(), "ALL", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getCurrentByOwnerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 8, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 20, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByOwnerCurrent(owner.getId(),
+                        LocalDateTime.now().withNano(0),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByOwner(owner.getId(), "CURRENT", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getPastByOwnerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 8, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 10, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByOwnerPast(owner.getId(),
+                        LocalDateTime.now().withNano(0),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByOwner(owner.getId(), "PAST", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getFutureByOwnerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 15, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 16, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByOwnerFuture(owner.getId(),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByOwner(owner.getId(), "FUTURE", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getWaitingByOwnerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 10, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 16, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByOwnerWaiting(owner.getId(),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByOwner(owner.getId(), "WAITING", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getRejectedByOwnerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 10, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 16, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByOwnerRejected(owner.getId(),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByOwner(owner.getId(), "REJECTED", 0, 1);
 
         Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
                 newBookingDtoOutputList.get(0).getId());
@@ -281,6 +480,213 @@ class BookingServiceImplTest {
         Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
                 newBookingDtoOutputList.get(0).getBooker().getId());
 
+    }
+
+    @Test
+    void getCurrentByBookerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 8, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 20, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByBookerCurrent(booker.getId(),
+                        LocalDateTime.now().withNano(0),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByBooker(booker.getId(), "CURRENT", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getPastByBookerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 8, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 10, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByBookerPast(booker.getId(),
+                        LocalDateTime.now().withNano(0),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByBooker(booker.getId(), "PAST", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getFutureByBookerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 15, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 16, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByBookerFuture(booker.getId(),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByBooker(booker.getId(), "FUTURE", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getWaitingByBookerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 10, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 16, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByBookerWaiting(booker.getId(),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByBooker(booker.getId(), "WAITING", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getRejectedByBookerTest() {
+        booking.setStart(LocalDateTime.of(2022, 12, 10, 8, 1));
+        booking.setEnd(LocalDateTime.of(2022, 12, 16, 8, 1));
+        List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
+        Mockito
+                .when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoOutput bookingDtoOutput = bookingService.getById(booking.getId(), booker.getId());
+        bookingDtoOutputList.add(bookingDtoOutput);
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+
+        Mockito
+                .when(bookingRepository.getAllByBookerRejected(booker.getId(),
+                        PageRequest.of(0, 1, Sort.by(DESC, "start"))))
+                .thenReturn(bookings);
+        List<BookingDtoOutput> newBookingDtoOutputList =
+                bookingService.getAllByBooker(booker.getId(), "REJECTED", 0, 1);
+
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getId(),
+                newBookingDtoOutputList.get(0).getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStart(),
+                newBookingDtoOutputList.get(0).getStart());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getEnd(),
+                newBookingDtoOutputList.get(0).getEnd());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getId(),
+                newBookingDtoOutputList.get(0).getItem().getId());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getItem().getName(),
+                newBookingDtoOutputList.get(0).getItem().getName());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getStatus(),
+                newBookingDtoOutputList.get(0).getStatus());
+        Assertions.assertEquals(bookingDtoOutputList.get(0).getBooker().getId(),
+                newBookingDtoOutputList.get(0).getBooker().getId());
+
+    }
+
+    @Test
+    void getFailByBookerTest() {
+
+        IllegalArgumentException ex = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            bookingService.getAllByBooker(booker.getId(), "LIKE", 0, 1);
+        });
+
+        Assertions.assertEquals("Unknown state: LIKE", ex.getMessage());
     }
 
     @Test

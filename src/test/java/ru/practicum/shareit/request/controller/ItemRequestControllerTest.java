@@ -33,13 +33,10 @@ class ItemRequestControllerTest {
 
     @Autowired
     ObjectMapper mapper;
-
     @MockBean
     RequestService requestService;
-
     @Autowired
     private MockMvc mvc;
-
     private User owner;
     private User requestor;
     private Item item;
@@ -176,6 +173,18 @@ class ItemRequestControllerTest {
                         is(itemRequestDtoOutput.getItems().get(0).getAvailable())))
                 .andExpect(jsonPath("$[0].items.[0].requestId",
                         is(itemRequestDtoOutput.getItems().get(0).getRequestId()), Long.class));
+    }
+
+    @Test
+    void getAllFail() throws Exception {
+        mvc.perform(get("/requests/all")
+                        .header("X-Sharer-User-Id", owner.getId())
+                        .param("from", "-1")
+                        .param("size", "1")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

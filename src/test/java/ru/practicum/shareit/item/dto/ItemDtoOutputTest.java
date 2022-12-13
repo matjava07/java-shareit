@@ -18,6 +18,7 @@ class ItemDtoOutputTest {
     private JacksonTester<ItemDtoOutput> jsonOutput;
     @Autowired
     private JacksonTester<List<ItemDtoOutput>> jsonList;
+
     @Test
     void testItemDto() throws Exception {
         ItemDtoOutput itemDtoOutput = ItemDtoOutput.builder()

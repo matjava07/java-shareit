@@ -42,6 +42,7 @@ class BookingDtoOutputTest {
         assertThat(result).extractingJsonPathStringValue("$.end")
                 .isEqualTo(bookingDtoOutput.getEnd().toString());
     }
+
     @Test
     void testItemDtoFromJsonList() throws Exception {
         List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();

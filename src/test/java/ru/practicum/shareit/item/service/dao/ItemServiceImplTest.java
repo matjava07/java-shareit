@@ -180,7 +180,9 @@ class ItemServiceImplTest {
                 .when(userService.getById(anyLong()))
                 .thenReturn(requestor);
         ObjectExcistenceException ex = Assertions.assertThrows(ObjectExcistenceException.class,
-                () -> {itemService.update(itemDtoInput, requestor.getId());});
+                () -> {
+                    itemService.update(itemDtoInput, requestor.getId());
+                });
         Assertions.assertEquals("У этого инструмента другой владелец", ex.getMessage());
 
     }
