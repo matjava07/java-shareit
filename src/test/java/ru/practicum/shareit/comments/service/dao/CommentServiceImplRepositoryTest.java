@@ -1,0 +1,85 @@
+package ru.practicum.shareit.comments.service.dao;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.booking.status.Status;
+import ru.practicum.shareit.comments.model.Comment;
+import ru.practicum.shareit.comments.repository.CommentRepository;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.repository.UserRepository;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+@DataJpaTest
+class CommentServiceImplRepositoryTest {
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ItemRepository itemRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Test
+    void findCommentForEmptyItemsTest() {
+        List<Comment> comments = commentRepository.findCommentForItems(List.of());
+        assertThat(comments).isEmpty();
+    }
+
+    @Test
+    void findCommentForItemsTest() {
+        User booker = new User();
+        booker.setName("Чича");
+        booker.setEmail("koti@yandex.ru");
+        userRepository.save(booker);
+
+        User owner = new User();
+        owner.setName("Mot");
+        owner.setEmail("mot@yandex.ru");
+        userRepository.save(owner);
+
+        Item item = new Item();
+        item.setOwner(owner);
+        item.setName("Мячик");
+        item.setAvailable(true);
+        item.setDescription("Теннисный мячик");
+        itemRepository.save(item);
+        List<Item> items = new ArrayList<>();
+        items.add(item);
+
+        Booking booking = new Booking();
+        booking.setStart(LocalDateTime.of(2022, 12, 8, 8, 0));
+        booking.setEnd(LocalDateTime.of(2022, 12, 9, 8, 0));
+        booking.setStatus(Status.WAITING);
+        booking.setBooker(booker);
+        booking.setItem(item);
+        bookingRepository.save(booking);
+
+        Comment comment = new Comment();
+        comment.setAuthor(booker);
+        comment.setItem(item);
+        comment.setCreated(LocalDateTime.of(2022, 12, 9, 12, 0));
+        comment.setText("Превосходный мяч");
+        commentRepository.save(comment);
+
+        List<Comment> comments = commentRepository.findCommentForItems(items);
+        assertFalse(comments.isEmpty());
+        assertEquals(comments.get(0).getId(), comment.getId());
+        assertEquals(comments.get(0).getText(), comment.getText());
+        assertEquals(comments.get(0).getAuthor().getId(), comment.getAuthor().getId());
+        assertEquals(comments.get(0).getItem().getId(), comment.getItem().getId());
+        assertEquals(comments.get(0).getCreated(), comment.getCreated());
+    }
+}
