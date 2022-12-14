@@ -16,7 +16,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDtoInput;
 import ru.practicum.shareit.request.dto.ItemRequestDtoOutput;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.RequestRepository;
-import ru.practicum.shareit.request.service.dal.RequestService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.dal.UserService;
 

@@ -15,7 +15,6 @@ import ru.practicum.shareit.booking.status.Status;
 import ru.practicum.shareit.comments.dto.CommentDto;
 import ru.practicum.shareit.comments.model.Comment;
 import ru.practicum.shareit.comments.repository.CommentRepository;
-import ru.practicum.shareit.comments.service.dal.CommentService;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.dal.ItemService;
 import ru.practicum.shareit.user.model.User;
