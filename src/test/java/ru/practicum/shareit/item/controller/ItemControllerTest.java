@@ -50,6 +50,7 @@ class ItemControllerTest {
     private Comment comment;
     private Booking booking;
     public static final String USER_ID = "X-Sharer-User-Id";
+
     @BeforeEach
     void setUp() {
         requestor = new User();
