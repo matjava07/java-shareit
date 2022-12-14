@@ -7,17 +7,17 @@ create table if not exists users
 create table if not exists request
 (
     id        bigint generated always as identity primary key,
-    description  varchar(300),
+    description  varchar(300) NOT NULL,
     requestor_id bigint,
-    created   TIMESTAMP,
+    created   TIMESTAMP NOT NULL,
     constraint fk_request_to_users foreign key (requestor_id) references users (id)
 );
 create table if not exists items
 (
     id           bigint generated always as identity primary key,
-    name         varchar(300),
-    description  varchar(300),
-    is_available boolean,
+    name         varchar(300) NOT NULL,
+    description  varchar(300) NOT NULL,
+    is_available boolean NOT NULL,
     owner_id     bigint,
     request_id   bigint,
     constraint fk_items_to_users foreign key (owner_id) references users (id),
@@ -26,9 +26,9 @@ create table if not exists items
 create table if not exists booking
 (
     id         bigint generated always as identity primary key,
-    start_time TIMESTAMP,
-    end_time   TIMESTAMP,
-    item_id    BIGINT NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time   TIMESTAMP NOT NULL,
+    item_id    BIGINT,
     booker_id  BIGINT,
     status     VARCHAR(20),
     constraint fk_booking_to_items foreign key (item_id) references items (id),
@@ -37,7 +37,7 @@ create table if not exists booking
 create table if not exists comments
 (
     id        bigint generated always as identity primary key,
-    text      varchar(320),
+    text      varchar(320) NOT NULL,
     item_id   bigint,
     author_id bigint,
     created   TIMESTAMP,

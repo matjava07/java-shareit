@@ -29,9 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
 
     @Autowired
-    ObjectMapper mapper;
+    private ObjectMapper mapper;
     @MockBean
-    UserService userService;
+    private UserService userService;
     @Autowired
     private MockMvc mvc;
     private UserDto userDto;
@@ -42,7 +42,7 @@ class UserControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void createTest() throws Exception {
         Mockito
                 .when(userService.create(any()))
                 .thenReturn(UserMapper.toUser(userDto));
@@ -59,7 +59,7 @@ class UserControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void updateTest() throws Exception {
         UserDto newUserDto = new UserDto();
         newUserDto.setName("Мега кот");
         newUserDto.setEmail("koti@yandex.ru");
@@ -79,7 +79,7 @@ class UserControllerTest {
     }
 
     @Test
-    void getById() throws Exception {
+    void getByIdTest() throws Exception {
         Mockito
                 .when(userService.getById(anyLong()))
                 .thenReturn(UserMapper.toUser(userDto));
@@ -95,7 +95,7 @@ class UserControllerTest {
     }
 
     @Test
-    void getAll() throws Exception {
+    void getAllTest() throws Exception {
         List<User> users = new ArrayList<>();
         users.add(UserMapper.toUser(userDto));
         Mockito
@@ -113,7 +113,7 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteById() throws Exception {
+    void deleteByIdTest() throws Exception {
         Mockito.when(userService.getById(userDto.getId()))
                 .thenReturn(UserMapper.toUser(userDto));
 

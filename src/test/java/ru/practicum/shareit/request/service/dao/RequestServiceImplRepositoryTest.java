@@ -48,7 +48,7 @@ class RequestServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByUser() {
+    void getAllByUserTest() {
         List<ItemRequest> itemRequests = requestRepository.getAllByUser(booker.getId(),
                 Sort.by(DESC, "created"));
 
@@ -57,7 +57,7 @@ class RequestServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllWithSize() {
+    void getAllWithSizeTest() {
         List<ItemRequest> itemRequests = requestRepository.getAllWithSize(owner.getId(),
                 PageRequest.of(0, 1, Sort.by(DESC, "created")));
 

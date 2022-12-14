@@ -37,7 +37,7 @@ class UserServiceImplTestIntegration {
     }
 
     @Test
-    void create() {
+    void createTest() {
         User userNew = service.create(user1);
 
         TypedQuery<User> query = em.createQuery("select u from User u where u.id = :id", User.class);
@@ -50,7 +50,7 @@ class UserServiceImplTestIntegration {
     }
 
     @Test
-    void update() {
+    void updateTest() {
         User userNew = service.create(user1);
         User user2 = new User();
         user2.setId(userNew.getId());
@@ -69,7 +69,7 @@ class UserServiceImplTestIntegration {
     }
 
     @Test
-    void getAll() {
+    void getAllTest() {
 
         User user2 = new User();
         user2.setName("Mot");
@@ -99,7 +99,7 @@ class UserServiceImplTestIntegration {
     }
 
     @Test
-    void getById() {
+    void getByIdTest() {
         User user2 = new User();
         user2.setName("Mot");
         user2.setEmail("mot@yandex.ru");
@@ -115,7 +115,7 @@ class UserServiceImplTestIntegration {
     }
 
     @Test
-    void deleteById() {
+    void deleteByIdTest() {
         User user2 = new User();
         user2.setName("Mot");
         user2.setEmail("mot@yandex.ru");

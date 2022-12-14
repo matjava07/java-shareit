@@ -72,7 +72,7 @@ class CommentServiceImplTestIntegration {
     }
 
     @Test
-    void create() {
+    void createTest() {
         CommentDto commentDtoNew = commentService.create(commentDto, itemDtoOutput.getId(), bookerNew.getId());
 
         TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.id = :id", Comment.class);

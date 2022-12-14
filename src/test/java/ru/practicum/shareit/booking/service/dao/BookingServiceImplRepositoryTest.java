@@ -73,7 +73,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByOwnerAll() {
+    void getAllByOwnerAllTest() {
         List<Booking> bookings = bookingRepository.getAllByOwnerAll(owner.getId(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -82,7 +82,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByOwnerPast() {
+    void getAllByOwnerPastTest() {
         List<Booking> bookings = bookingRepository.getAllByOwnerPast(owner.getId(), LocalDateTime.now(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -90,7 +90,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByOwnerFuture() {
+    void getAllByOwnerFutureTest() {
         List<Booking> bookings = bookingRepository.getAllByOwnerFuture(owner.getId(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -99,7 +99,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByOwnerCurrent() {
+    void getAllByOwnerCurrentTest() {
         List<Booking> bookings = bookingRepository.getAllByOwnerCurrent(owner.getId(), LocalDateTime.now(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -107,7 +107,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByOwnerRejected() {
+    void getAllByOwnerRejectedTest() {
         List<Booking> bookings = bookingRepository.getAllByOwnerRejected(owner.getId(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -115,7 +115,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByOwnerWaiting() {
+    void getAllByOwnerWaitingTest() {
         List<Booking> bookings = bookingRepository.getAllByOwnerWaiting(owner.getId(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -124,7 +124,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByBookerAll() {
+    void getAllByBookerAllTest() {
         List<Booking> bookings = bookingRepository.getAllByBookerAll(booker.getId(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -133,7 +133,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByBookerPast() {
+    void getAllByBookerPastTest() {
         List<Booking> bookings = bookingRepository.getAllByBookerPast(booker.getId(), LocalDateTime.now(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -141,7 +141,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByBookerFuture() {
+    void getAllByBookerFutureTest() {
         List<Booking> bookings = bookingRepository.getAllByBookerFuture(booker.getId(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -150,7 +150,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByBookerCurrent() {
+    void getAllByBookerCurrentTest() {
         List<Booking> bookings = bookingRepository.getAllByBookerCurrent(booker.getId(), LocalDateTime.now(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -158,7 +158,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByBookerRejected() {
+    void getAllByBookerRejectedTest() {
         List<Booking> bookings = bookingRepository.getAllByBookerRejected(booker.getId(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -166,7 +166,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void getAllByBookerWaiting() {
+    void getAllByBookerWaitingTest() {
         List<Booking> bookings = bookingRepository.getAllByBookerWaiting(booker.getId(),
                 PageRequest.of(0, 1, Sort.by(DESC, "start")));
 
@@ -175,7 +175,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void findAll() {
+    void findAllTest() {
         List<Booking> bookings = bookingRepository.findAll(Sort.by(DESC, "start"));
 
         assertEquals(1, bookings.size());
@@ -183,7 +183,7 @@ class BookingServiceImplRepositoryTest {
     }
 
     @Test
-    void findApprovedForItems() {
+    void findApprovedForItemsTest() {
         List<Item> items = itemRepository.findAll();
         booking.setStatus(Status.APPROVED);
         List<Booking> bookings = bookingRepository.findApprovedForItems(items, Sort.by(DESC, "start"));

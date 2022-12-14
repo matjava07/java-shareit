@@ -35,13 +35,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public CommentDto create(CommentDto commentDto, Long itemId, Long userId) {
         Item item = itemService.getByIdForItem(itemId);
-        List<Booking> bookings = bookingRepository.getAllByBookerPast(
-                        userId,
-                        LocalDateTime.now(),
-                        PageRequest.of(0, 100, Sort.by(DESC, "start")))
-                .stream()
-                .filter(b -> b.getItem().getId().equals(itemId))
-                .collect(Collectors.toList());
+        List<Booking> bookings = getBookings(userId, itemId);
         if (bookings.size() != 0) {
             Comment comment = commentRepository.save(CommentMapper.toComment(commentDto));
             comment.setAuthor(bookings.get(0).getBooker());
@@ -50,5 +44,15 @@ public class CommentServiceImpl implements CommentService {
         } else {
             throw new ValidationException("Предмет не бронировался или ожидает бронирования");
         }
+    }
+
+    private List<Booking> getBookings(Long userId, Long itemId) {
+        return bookingRepository.getAllByBookerPast(
+                        userId,
+                        LocalDateTime.now(),
+                        PageRequest.of(0, 100, Sort.by(DESC, "start")))
+                .stream()
+                .filter(b -> b.getItem().getId().equals(itemId))
+                .collect(Collectors.toList());
     }
 }

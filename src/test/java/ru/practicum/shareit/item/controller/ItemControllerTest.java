@@ -36,11 +36,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = ItemController.class)
 class ItemControllerTest {
     @Autowired
-    ObjectMapper mapper;
+    private ObjectMapper mapper;
     @MockBean
-    ItemService itemService;
+    private ItemService itemService;
     @MockBean
-    CommentService commentService;
+    private CommentService commentService;
     @Autowired
     private MockMvc mvc;
     private User owner;
@@ -49,7 +49,7 @@ class ItemControllerTest {
     private ItemDtoInput itemDtoInput;
     private Comment comment;
     private Booking booking;
-
+    public static final String USER_ID = "X-Sharer-User-Id";
     @BeforeEach
     void setUp() {
         requestor = new User();
@@ -98,7 +98,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void createTest() throws Exception {
         ItemDtoOutput itemDtoOutput = ItemMapper.toItemDto(item);
         Mockito
                 .when(itemService.create(itemDtoInput, owner.getId()))
@@ -106,7 +106,7 @@ class ItemControllerTest {
 
         mvc.perform(post("/items")
                         .content(mapper.writeValueAsString(itemDtoInput))
-                        .header("X-Sharer-User-Id", owner.getId())
+                        .header(USER_ID, owner.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -119,7 +119,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void updateTest() throws Exception {
         itemDtoInput.setName("Шар");
         ItemDtoOutput itemDtoOutput = ItemMapper.toItemDto(item);
         itemDtoOutput.setName("Шар");
@@ -129,7 +129,7 @@ class ItemControllerTest {
 
         mvc.perform(patch("/items/1")
                         .content(mapper.writeValueAsString(itemDtoInput))
-                        .header("X-Sharer-User-Id", owner.getId())
+                        .header(USER_ID, owner.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -142,7 +142,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getById() throws Exception {
+    void getByIdTest() throws Exception {
         ItemDtoOutput itemDtoOutput = ItemMapper.toItemDto(item);
         ItemDtoOutput.Booking lastBooking = new ItemDtoOutput.Booking();
         lastBooking.setId(booking.getId());
@@ -158,7 +158,7 @@ class ItemControllerTest {
                 .thenReturn(itemDtoOutput);
 
         mvc.perform(get("/items/1")
-                        .header("X-Sharer-User-Id", owner.getId())
+                        .header(USER_ID, owner.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -182,7 +182,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getAll() throws Exception {
+    void getAllTest() throws Exception {
         ItemDtoOutput itemDtoOutput = ItemMapper.toItemDto(item);
         ItemDtoOutput.Booking lastBooking = new ItemDtoOutput.Booking();
         lastBooking.setId(booking.getId());
@@ -200,7 +200,7 @@ class ItemControllerTest {
                 .thenReturn(itemDtoOutputList);
 
         mvc.perform(get("/items")
-                        .header("X-Sharer-User-Id", owner.getId())
+                        .header(USER_ID, owner.getId())
                         .param("from", "0")
                         .param("size", "1")
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -226,7 +226,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getByText() throws Exception {
+    void getByTextTest() throws Exception {
         ItemDtoOutput itemDtoOutput = ItemMapper.toItemDto(item);
         ItemDtoOutput.Booking lastBooking = new ItemDtoOutput.Booking();
         lastBooking.setId(booking.getId());
@@ -270,7 +270,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getByWithoutText() throws Exception {
+    void getByWithoutTextTest() throws Exception {
         Mockito
                 .when(itemService.getByText("", 0, 1))
                 .thenReturn(List.of());
@@ -287,7 +287,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getByWithoutTextFail() throws Exception {
+    void getByWithoutTextFailTest() throws Exception {
 
         mvc.perform(get("/items/search")
                         .param("text", "")
@@ -300,14 +300,14 @@ class ItemControllerTest {
     }
 
     @Test
-    void createComment() throws Exception {
+    void createCommentTest() throws Exception {
         CommentDto commentDto = CommentMapper.toCommentDto(comment);
         Mockito
                 .when(commentService.create(commentDto, item.getId(), requestor.getId()))
                 .thenReturn(commentDto);
         mvc.perform(post("/items/1/comment")
                         .content(mapper.writeValueAsString(commentDto))
-                        .header("X-Sharer-User-Id", requestor.getId())
+                        .header(USER_ID, requestor.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

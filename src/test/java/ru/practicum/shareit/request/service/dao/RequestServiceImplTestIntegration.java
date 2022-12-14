@@ -47,7 +47,7 @@ class RequestServiceImplTestIntegration {
     }
 
     @Test
-    void create() {
+    void createTest() {
         ItemRequestDtoOutput itemRequestDtoOutput = requestService.create(itemRequestDtoInput, requestorNew.getId());
 
         TypedQuery<ItemRequest> query = em.createQuery("select ir from ItemRequest ir where ir.id = :id",
@@ -60,7 +60,7 @@ class RequestServiceImplTestIntegration {
     }
 
     @Test
-    void getById() {
+    void getByIdTest() {
         ItemRequestDtoOutput itemRequestDtoOutput = requestService.create(itemRequestDtoInput, requestorNew.getId());
         ItemRequestDtoOutput itemRequestDtoOutput1 = requestService.getById(itemRequestDtoOutput.getId(),
                 requestorNew.getId());
@@ -71,7 +71,7 @@ class RequestServiceImplTestIntegration {
     }
 
     @Test
-    void getAllByUserId() {
+    void getAllByUserIdTest() {
         ItemRequestDtoOutput itemRequestDtoOutput = requestService.create(itemRequestDtoInput, requestorNew.getId());
         List<ItemRequestDtoOutput> itemRequestDtoOutputList = requestService.getAllByUserId(requestorNew.getId());
 
@@ -81,7 +81,7 @@ class RequestServiceImplTestIntegration {
     }
 
     @Test
-    void getAll() {
+    void getAllTest() {
         User user = new User();
         user.setEmail("kotrrr@yandex.ru");
         user.setName("Мааау");

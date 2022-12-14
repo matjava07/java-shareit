@@ -38,7 +38,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable("id") Long userId) {
-        log.info("Пользователь с id = " + userId);
+        log.info("Пользователь с id = {}", userId);
         return UserMapper.toUserDto(userService.getById(userId));
     }
 
@@ -50,7 +50,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable("id") Long userId) {
-        log.info("Удаление пользователя с id = " + userId);
+        log.info("Удаление пользователя с id = {}", userId);
         userService.deleteById(userId);
     }
 }

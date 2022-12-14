@@ -32,15 +32,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = BookingController.class)
 class BookingControllerTest {
     @Autowired
-    ObjectMapper mapper;
+    private ObjectMapper mapper;
     @MockBean
-    BookingService bookingService;
+    private BookingService bookingService;
     @Autowired
     private MockMvc mvc;
     private User booker;
     private User owner;
     private Booking booking;
     private BookingDtoInput bookingDtoInput;
+    public static final String USER_ID = "X-Sharer-User-Id";
 
     @BeforeEach
     void setUp() {
@@ -77,7 +78,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void createTest() throws Exception {
         BookingDtoOutput bookingDtoOutput = BookingMapper.toBookingDto(booking);
         Mockito
                 .when(bookingService.create(bookingDtoInput, booker.getId()))
@@ -85,7 +86,7 @@ class BookingControllerTest {
 
         mvc.perform(post("/bookings")
                         .content(mapper.writeValueAsString(bookingDtoInput))
-                        .header("X-Sharer-User-Id", booker.getId())
+                        .header(USER_ID, booker.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -100,7 +101,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void updateTest() throws Exception {
         BookingDtoOutput bookingDtoOutput = BookingMapper.toBookingDto(booking);
         bookingDtoOutput.setStatus(Status.APPROVED);
         Mockito
@@ -109,7 +110,7 @@ class BookingControllerTest {
 
         mvc.perform(patch("/bookings/1")
                         .content(mapper.writeValueAsString(bookingDtoInput))
-                        .header("X-Sharer-User-Id", booker.getId())
+                        .header(USER_ID, booker.getId())
                         .param("approved", "true")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -125,14 +126,14 @@ class BookingControllerTest {
     }
 
     @Test
-    void getById() throws Exception {
+    void getByIdTest() throws Exception {
         BookingDtoOutput bookingDtoOutput = BookingMapper.toBookingDto(booking);
         Mockito
                 .when(bookingService.getById(bookingDtoInput.getId(), booker.getId()))
                 .thenReturn(bookingDtoOutput);
 
         mvc.perform(get("/bookings/1")
-                        .header("X-Sharer-User-Id", booker.getId())
+                        .header(USER_ID, booker.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -147,7 +148,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void getAllByOwner() throws Exception {
+    void getAllByOwnerTest() throws Exception {
         BookingDtoOutput bookingDtoOutput = BookingMapper.toBookingDto(booking);
         List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
         bookingDtoOutputList.add(bookingDtoOutput);
@@ -156,7 +157,7 @@ class BookingControllerTest {
                 .thenReturn(bookingDtoOutputList);
 
         mvc.perform(get("/bookings/owner")
-                        .header("X-Sharer-User-Id", owner.getId())
+                        .header(USER_ID, owner.getId())
                         .param("state", "ALL")
                         .param("from", "0")
                         .param("size", "1")
@@ -174,7 +175,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void getAllByBooker() throws Exception {
+    void getAllByBookerTest() throws Exception {
         BookingDtoOutput bookingDtoOutput = BookingMapper.toBookingDto(booking);
         List<BookingDtoOutput> bookingDtoOutputList = new ArrayList<>();
         bookingDtoOutputList.add(bookingDtoOutput);
@@ -183,7 +184,7 @@ class BookingControllerTest {
                 .thenReturn(bookingDtoOutputList);
 
         mvc.perform(get("/bookings")
-                        .header("X-Sharer-User-Id", booker.getId())
+                        .header(USER_ID, booker.getId())
                         .param("state", "ALL")
                         .param("from", "0")
                         .param("size", "1")
@@ -201,10 +202,10 @@ class BookingControllerTest {
     }
 
     @Test
-    void getAllByBookerFail() throws Exception {
+    void getAllByBookerFailTest() throws Exception {
 
         mvc.perform(get("/bookings")
-                        .header("X-Sharer-User-Id", booker.getId())
+                        .header(USER_ID, booker.getId())
                         .param("state", "ALL")
                         .param("from", "-1")
                         .param("size", "0")

@@ -33,13 +33,13 @@ class CommentServiceImplRepositoryTest {
     private BookingRepository bookingRepository;
 
     @Test
-    void findCommentForEmptyItems() {
+    void findCommentForEmptyItemsTest() {
         List<Comment> comments = commentRepository.findCommentForItems(List.of());
         assertThat(comments).isEmpty();
     }
 
     @Test
-    void findCommentForItems() {
+    void findCommentForItemsTest() {
         User booker = new User();
         booker.setName("Чича");
         booker.setEmail("koti@yandex.ru");

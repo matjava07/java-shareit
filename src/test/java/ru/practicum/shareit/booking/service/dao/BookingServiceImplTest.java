@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -34,13 +35,14 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @ExtendWith(MockitoExtension.class)
 class BookingServiceImplTest {
 
-    private BookingService bookingService;
     @Mock
     private BookingRepository bookingRepository;
     @Mock
     private UserService userService;
     @Mock
     private ItemService itemService;
+    @InjectMocks
+    private BookingServiceImpl bookingService;
     private User booker;
     private User owner;
     private Item item;
@@ -49,7 +51,6 @@ class BookingServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        bookingService = new BookingServiceImpl(bookingRepository, userService, itemService);
         booker = new User();
         booker.setId(1L);
         booker.setName("Чича");

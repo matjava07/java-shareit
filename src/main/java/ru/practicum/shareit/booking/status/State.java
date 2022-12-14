@@ -7,6 +7,7 @@ public enum State {
     FUTURE,
     WAITING,
     REJECTED;
+
     public static class States {
         public static State getState(String name) {
             for (State state: State.values()) {

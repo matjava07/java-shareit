@@ -82,11 +82,9 @@ public class RequestServiceImpl implements RequestService {
 
     private List<ItemRequestDtoOutput> getWithItems(List<ItemRequest> requests) {
         Map<ItemRequest, List<Item>> answers = getAnswer(requests);
-        List<ItemRequestDtoOutput> itemRequestDtoOutputList = new ArrayList<>();
-        for (ItemRequest itemRequest : requests) {
-            itemRequestDtoOutputList.add(appendItemToItemRequest(itemRequest,
-                    answers.getOrDefault(itemRequest, Collections.emptyList())));
-        }
-        return itemRequestDtoOutputList;
+        return requests.stream()
+                .map(itemRequest -> appendItemToItemRequest(itemRequest,
+                        answers.getOrDefault(itemRequest, Collections.emptyList())))
+                .collect(toList());
     }
 }

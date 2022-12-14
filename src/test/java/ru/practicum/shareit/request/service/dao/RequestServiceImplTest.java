@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,13 +32,14 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @ExtendWith(MockitoExtension.class)
 class RequestServiceImplTest {
 
-    private RequestService requestService;
     @Mock
     private RequestRepository requestRepository;
     @Mock
     private UserService userService;
     @Mock
     private ItemRepository itemRepository;
+    @InjectMocks
+    private RequestServiceImpl requestService;
     private User requestor;
     private Item item;
     private ItemRequest request;
@@ -45,7 +47,6 @@ class RequestServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        requestService = new RequestServiceImpl(requestRepository, userService, itemRepository);
         requestor = new User();
         requestor.setId(1L);
         requestor.setName("Чича");
@@ -76,7 +77,7 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void create() {
+    void createTest() {
         Mockito
                 .when(userService.getById(anyLong()))
                 .thenReturn(requestor);
@@ -91,7 +92,7 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void getById() {
+    void getByIdTest() {
         List<ItemRequest> itemRequests = new ArrayList<>();
         itemRequests.add(request);
         List<Item> items = new ArrayList<>();
@@ -118,7 +119,7 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void getAllByUserId() {
+    void getAllByUserIdTest() {
         List<ItemRequest> itemRequests = new ArrayList<>();
         itemRequests.add(request);
         Mockito
@@ -135,7 +136,7 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void getAll() {
+    void getAllTest() {
         List<ItemRequest> itemRequests = new ArrayList<>();
         itemRequests.add(request);
         Mockito

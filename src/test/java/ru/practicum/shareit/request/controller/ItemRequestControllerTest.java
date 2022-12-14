@@ -32,9 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ItemRequestControllerTest {
 
     @Autowired
-    ObjectMapper mapper;
+    private ObjectMapper mapper;
     @MockBean
-    RequestService requestService;
+    private RequestService requestService;
     @Autowired
     private MockMvc mvc;
     private User owner;
@@ -42,6 +42,7 @@ class ItemRequestControllerTest {
     private Item item;
     private ItemRequest request;
     private ItemRequestDtoInput itemRequestDtoInput;
+    public static final String USER_ID = "X-Sharer-User-Id";
 
     @BeforeEach
     void setUp() {
@@ -75,7 +76,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void createTest() throws Exception {
         ItemRequestDtoOutput itemRequestDtoOutput = RequestMapper.toRequestDto(request);
         Mockito
                 .when(requestService.create(itemRequestDtoInput, requestor.getId()))
@@ -83,7 +84,7 @@ class ItemRequestControllerTest {
 
         mvc.perform(post("/requests")
                         .content(mapper.writeValueAsString(itemRequestDtoInput))
-                        .header("X-Sharer-User-Id", requestor.getId())
+                        .header(USER_ID, requestor.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -94,7 +95,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getAllByUserId() throws Exception {
+    void getAllByUserIdTest() throws Exception {
         ItemRequestDtoOutput itemRequestDtoOutput = RequestMapper.toRequestDto(request);
         ItemRequestDtoOutput.Item item1 = new ItemRequestDtoOutput.Item();
         item1.setId(item.getId());
@@ -113,7 +114,7 @@ class ItemRequestControllerTest {
                 .thenReturn(itemRequestDtoOutputList);
 
         mvc.perform(get("/requests")
-                        .header("X-Sharer-User-Id", requestor.getId())
+                        .header(USER_ID, requestor.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -134,7 +135,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getAll() throws Exception {
+    void getAllTest() throws Exception {
         ItemRequestDtoOutput itemRequestDtoOutput = RequestMapper.toRequestDto(request);
         ItemRequestDtoOutput.Item item1 = new ItemRequestDtoOutput.Item();
         item1.setId(item.getId());
@@ -153,7 +154,7 @@ class ItemRequestControllerTest {
                 .thenReturn(itemRequestDtoOutputList);
 
         mvc.perform(get("/requests/all")
-                        .header("X-Sharer-User-Id", owner.getId())
+                        .header(USER_ID, owner.getId())
                         .param("from", "0")
                         .param("size", "1")
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -176,9 +177,9 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getAllFail() throws Exception {
+    void getAllFailTest() throws Exception {
         mvc.perform(get("/requests/all")
-                        .header("X-Sharer-User-Id", owner.getId())
+                        .header(USER_ID, owner.getId())
                         .param("from", "-1")
                         .param("size", "1")
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -188,7 +189,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getById() throws Exception {
+    void getByIdTest() throws Exception {
         ItemRequestDtoOutput itemRequestDtoOutput = RequestMapper.toRequestDto(request);
         ItemRequestDtoOutput.Item item1 = new ItemRequestDtoOutput.Item();
         item1.setId(item.getId());
@@ -205,7 +206,7 @@ class ItemRequestControllerTest {
                 .thenReturn(itemRequestDtoOutput);
 
         mvc.perform(get("/requests/1")
-                        .header("X-Sharer-User-Id", requestor.getId())
+                        .header(USER_ID, requestor.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

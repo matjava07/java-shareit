@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,13 +30,14 @@ import static org.mockito.ArgumentMatchers.anyLong;
 @ExtendWith(MockitoExtension.class)
 class CommentServiceImplTest {
 
-    private CommentService commentService;
     @Mock
     private CommentRepository commentRepository;
     @Mock
     private ItemService itemService;
     @Mock
     private BookingRepository bookingRepository;
+    @InjectMocks
+    private CommentServiceImpl commentService;
     private User booker;
     private Item item;
     private Booking booking;
@@ -44,7 +46,6 @@ class CommentServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        commentService = new CommentServiceImpl(commentRepository, itemService, bookingRepository);
         booker = new User();
         booker.setId(1L);
         booker.setName("Чича");

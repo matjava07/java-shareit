@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,14 +20,12 @@ import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
-    private UserServiceImpl userService;
+
     @Mock
     private UserRepository userRepository;
 
-    @BeforeEach
-    void setUp() {
-        userService = new UserServiceImpl(userRepository);
-    }
+    @InjectMocks
+    private UserServiceImpl userService;
 
     @Test
     void createTest() {

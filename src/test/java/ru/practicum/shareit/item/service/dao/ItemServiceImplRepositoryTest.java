@@ -59,14 +59,14 @@ class ItemServiceImplRepositoryTest {
     }
 
     @Test
-    void getAll() {
+    void getAllTest() {
         List<Item> items = itemRepository.getAll(owner.getId(), PageRequest.of(0, 1, Sort.unsorted()));
         assertEquals(1, items.size());
         assertEquals(item.getId(), items.get(0).getId());
     }
 
     @Test
-    void getByText() {
+    void getByTextTest() {
         List<Item> items = itemRepository.getByText("мяч", PageRequest.of(0, 1, Sort.unsorted()));
 
         assertEquals(1, items.size());
@@ -74,7 +74,7 @@ class ItemServiceImplRepositoryTest {
     }
 
     @Test
-    void getByRequestId() {
+    void getByRequestIdTest() {
         List<ItemRequest> itemRequests = requestRepository.findAll();
         List<Item> items = itemRepository.getByRequestId(itemRequests);
 
