@@ -14,11 +14,7 @@ import java.time.LocalDateTime;
 public class BookingDtoInput {
 
     private Long id;
-    @FutureOrPresent(groups = {Create.class})
-    @NotNull(groups = {Create.class})
     private LocalDateTime start;
-    @Future(groups = {Create.class})
-    @NotNull(groups = {Create.class})
     private LocalDateTime end;
     private Long itemId;
 }

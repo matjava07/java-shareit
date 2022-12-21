@@ -12,11 +12,8 @@ import javax.validation.constraints.NotNull;
 public class ItemDtoInput {
 
     private Long id;
-    @NotBlank(groups = {Create.class})
     private String name;
-    @NotBlank(groups = {Create.class})
     private String description;
-    @NotNull(groups = {Create.class})
     private Boolean available;
     private Long requestId;
 }

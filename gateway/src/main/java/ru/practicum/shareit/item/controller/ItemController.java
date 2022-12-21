@@ -59,7 +59,7 @@ public class ItemController {
         if (!text.isBlank()) {
             return itemClient.getByText(text.toLowerCase(), from, size);
         } else {
-            return ResponseEntity.ok().body(List.of());
+            return ResponseEntity.ok(List.of());
         }
     }
 
