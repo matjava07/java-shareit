@@ -5,8 +5,6 @@ import lombok.Setter;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,6 +21,5 @@ public class ItemRequest {
     @ManyToOne
     @JoinColumn(name = "requestor_id", nullable = false)
     private User requestor;
-    @NotNull
     private LocalDateTime created;
 }

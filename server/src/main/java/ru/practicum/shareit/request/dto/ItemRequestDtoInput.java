@@ -2,9 +2,7 @@ package ru.practicum.shareit.request.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.user.valid.Create;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
