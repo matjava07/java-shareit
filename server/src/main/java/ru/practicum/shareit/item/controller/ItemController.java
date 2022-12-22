@@ -28,28 +28,28 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ItemDtoOutput update(@RequestBody ItemDtoInput itemDto,
                                 @RequestHeader(USER_ID) Long userId,
-                                @PathVariable("itemId") Long itemId) {
+                                @PathVariable Long itemId) {
         itemDto.setId(itemId);
         return itemService.update(itemDto, userId);
     }
 
     @GetMapping("/{itemId}")
-    public ItemDtoOutput getById(@PathVariable("itemId") Long itemId,
+    public ItemDtoOutput getById(@PathVariable Long itemId,
                                  @RequestHeader(USER_ID) Long ownerId) {
         return itemService.getById(itemId, ownerId);
     }
 
     @GetMapping
     public List<ItemDtoOutput> getAll(@RequestHeader(USER_ID) Long userId,
-                                      @RequestParam(value = "from", defaultValue = "0") Integer from,
-                                      @RequestParam(value = "size", defaultValue = "20") Integer size) {
+                                      @RequestParam(defaultValue = "0") Integer from,
+                                      @RequestParam(defaultValue = "20") Integer size) {
         return itemService.getAll(userId, from, size);
     }
 
     @GetMapping("/search")
-    public List<ItemDtoOutput> getByText(@RequestParam("text") String text,
-                                         @RequestParam(value = "from", defaultValue = "0") Integer from,
-                                         @RequestParam(value = "size", defaultValue = "20") Integer size) {
+    public List<ItemDtoOutput> getByText(@RequestParam String text,
+                                         @RequestParam(defaultValue = "0") Integer from,
+                                         @RequestParam(defaultValue = "20") Integer size) {
         if (text.isBlank()) {
             return List.of();
         } else {
@@ -59,7 +59,7 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public CommentDto createComment(@RequestBody CommentDto commentDto,
-                                    @PathVariable("itemId") Long itemId,
+                                    @PathVariable Long itemId,
                                     @RequestHeader(USER_ID) Long userId) {
         return commentService.create(commentDto, itemId, userId);
     }

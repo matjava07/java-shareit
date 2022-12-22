@@ -15,7 +15,7 @@ import javax.validation.ConstraintViolationException;
 public class ExceptionHandlers {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> exc(Throwable ex) {
+    public ResponseEntity<ErrorResponse> exc(Exception ex) {
         log.info("Код ошибки: 500");
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }

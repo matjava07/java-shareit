@@ -28,37 +28,33 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public ResponseEntity<Object> update(@RequestParam("approved") Boolean approved,
-                                         @PathVariable("bookingId") Long bookingId,
+    public ResponseEntity<Object> update(@RequestParam Boolean approved,
+                                         @PathVariable Long bookingId,
                                          @RequestHeader(USER_ID) Long userId) {
         return bookingClient.update(bookingId, userId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<Object> getById(@PathVariable("bookingId") Long bookingId,
+    public ResponseEntity<Object> getById(@PathVariable Long bookingId,
                                           @RequestHeader(USER_ID) Long userId) {
         return bookingClient.getById(bookingId, userId);
     }
 
     @GetMapping("/owner")
-    public ResponseEntity<Object> getAllByOwner(@RequestParam(value = "state", defaultValue = "ALL") String state,
+    public ResponseEntity<Object> getAllByOwner(@RequestParam(defaultValue = "ALL") String state,
                                                 @RequestHeader(USER_ID) Long userId,
-                                                @PositiveOrZero @RequestParam(value = "from",
-                                                        defaultValue = "0") Integer from,
-                                                @Positive @RequestParam(value = "size",
-                                                        defaultValue = "20") Integer size) {
+                                                @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                                @Positive @RequestParam(defaultValue = "20") Integer size) {
         State.States.getState(state);
         return bookingClient.getAllByOwner(userId, state, from, size);
 
     }
 
     @GetMapping()
-    public ResponseEntity<Object> getAllByBooker(@RequestParam(value = "state", defaultValue = "ALL") String state,
+    public ResponseEntity<Object> getAllByBooker(@RequestParam(defaultValue = "ALL") String state,
                                                  @RequestHeader(USER_ID) Long userId,
-                                                 @PositiveOrZero @RequestParam(value = "from",
-                                                         defaultValue = "0") Integer from,
-                                                 @Positive @RequestParam(value = "size",
-                                                         defaultValue = "20") Integer size) {
+                                                 @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                                 @Positive @RequestParam(defaultValue = "20") Integer size) {
 
         State.States.getState(state);
         return bookingClient.getAllByBooker(userId, state, from, size);

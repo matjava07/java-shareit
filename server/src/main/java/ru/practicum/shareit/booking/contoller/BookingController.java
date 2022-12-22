@@ -23,35 +23,31 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDtoOutput update(@RequestParam("approved") Boolean approved,
-                                   @PathVariable("bookingId") Long bookingId,
+    public BookingDtoOutput update(@RequestParam Boolean approved,
+                                   @PathVariable Long bookingId,
                                    @RequestHeader(USER_ID) Long userId) {
         return bookingService.update(bookingId, userId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDtoOutput getById(@PathVariable("bookingId") Long bookingId,
+    public BookingDtoOutput getById(@PathVariable Long bookingId,
                                     @RequestHeader(USER_ID) Long userId) {
         return bookingService.getById(bookingId, userId);
     }
 
     @GetMapping("/owner")
-    public List<BookingDtoOutput> getAllByOwner(@RequestParam(value = "state", defaultValue = "ALL") String state,
+    public List<BookingDtoOutput> getAllByOwner(@RequestParam(defaultValue = "ALL") String state,
                                                 @RequestHeader(USER_ID) Long userId,
-                                                @RequestParam(value = "from",
-                                                        defaultValue = "0") Integer from,
-                                                @RequestParam(value = "size",
-                                                        defaultValue = "20") Integer size) {
+                                                @RequestParam(defaultValue = "0") Integer from,
+                                                @RequestParam(defaultValue = "20") Integer size) {
         return bookingService.getAllByOwner(userId, state, from, size);
     }
 
     @GetMapping()
-    public List<BookingDtoOutput> getAllByBooker(@RequestParam(value = "state", defaultValue = "ALL") String state,
+    public List<BookingDtoOutput> getAllByBooker(@RequestParam(defaultValue = "ALL") String state,
                                                  @RequestHeader(USER_ID) Long userId,
-                                                 @RequestParam(value = "from",
-                                                         defaultValue = "0") Integer from,
-                                                 @RequestParam(value = "size",
-                                                         defaultValue = "20") Integer size) {
+                                                 @RequestParam(defaultValue = "0") Integer from,
+                                                 @RequestParam(defaultValue = "20") Integer size) {
         return bookingService.getAllByBooker(userId, state, from, size);
     }
 

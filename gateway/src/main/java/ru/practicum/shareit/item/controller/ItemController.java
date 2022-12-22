@@ -34,28 +34,28 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> update(@RequestBody @Validated(Update.class) ItemDtoInput itemDto,
                                          @RequestHeader(USER_ID) Long userId,
-                                         @PathVariable("itemId") Long itemId) {
+                                         @PathVariable Long itemId) {
         itemDto.setId(itemId);
         return itemClient.update(itemDto, userId, itemId);
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<Object> getById(@PathVariable("itemId") Long itemId,
+    public ResponseEntity<Object> getById(@PathVariable Long itemId,
                                           @RequestHeader(USER_ID) Long ownerId) {
         return itemClient.getById(itemId, ownerId);
     }
 
     @GetMapping
     public ResponseEntity<Object> getAll(@RequestHeader(USER_ID) Long userId,
-                                         @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") Integer from,
-                                         @Positive @RequestParam(value = "size", defaultValue = "20") Integer size) {
+                                         @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                         @Positive @RequestParam(defaultValue = "20") Integer size) {
         return itemClient.getAll(userId, from, size);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Object> getByText(@RequestParam("text") String text,
-                                            @PositiveOrZero @RequestParam(value = "from", defaultValue = "0") Integer from,
-                                            @Positive @RequestParam(value = "size", defaultValue = "20") Integer size) {
+    public ResponseEntity<Object> getByText(@RequestParam String text,
+                                            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                            @Positive @RequestParam(defaultValue = "20") Integer size) {
         if (!text.isBlank()) {
             return itemClient.getByText(text.toLowerCase(), from, size);
         } else {
@@ -65,7 +65,7 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> createComment(@Valid @RequestBody CommentDto commentDto,
-                                                @PathVariable("itemId") Long itemId,
+                                                @PathVariable Long itemId,
                                                 @RequestHeader(USER_ID) Long userId) {
         return commentClient.create(itemId, userId, commentDto);
     }
